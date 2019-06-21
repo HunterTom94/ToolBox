@@ -4,6 +4,8 @@ import cv2
 
 
 def read_tif(source_folder, file_name=[]):
+    #  Read tif video file and return numpy array and video filename
+    #
     #  Arg:    source_folder -- string, absolute address of folder; if only one argument is provided, this argument indicates full file path
     #          file_name -- string, file name containing suffix
     #  Return: raw_stack -- np array, [frame_number, row_number, column_number]
@@ -19,6 +21,8 @@ def read_tif(source_folder, file_name=[]):
 
 
 def get_peak_frame(source):
+    #  Return the frame and the index of that frame in an video that has the overall summed pixel value
+    #
     #  Arg:    source -- 3darray, input video
     #  Return: peak   -- 2darray, peak frame of the video
     #          ind    -- int, frame index of the peak frame
@@ -29,6 +33,8 @@ def get_peak_frame(source):
 
 
 def deltaF_video(source, f0_frames):
+    #  Return a video that is subtracted from average of a series of frames (f0)
+    #
     #  Arg:    source     -- string, absolute address of input video file
     #                     -- or 3darray, input video
     #          f0_frames  -- 1darray, array of frames to be averaged as f0
@@ -44,6 +50,8 @@ def deltaF_video(source, f0_frames):
 
 
 def invert(source, bit):
+    #  Invert the pixel values of a video based on its bit depth
+    #
     #  Arg:    source     -- ndarray, input image/video
     #          bit        -- int, bit depth of the source to be inverted
     #  Return:            -- inverted image/video
@@ -51,13 +59,18 @@ def invert(source, bit):
 
 
 def allgin_zoom(source, stimuli_frame, rectangle, rectangle_specs=[], circle_specs=[]):
+    #  Concatenate a video and a zoomed region in the video side by side. Zoomed region is indicated by a rectangle.
+    #  Frames where the stimuli are presented will be indicated with a circle at the lower left of the output video.
+    #  Input video is expected to be color-coded in RGB.
+    #
     #  Arg:    source               -- string, absolute address of folder; if only one argument is provided, this argument indicates full file path
-    #                               -- or 3darray, input video
+    #                               -- or 4darray, input video with RGB channels (frame_num, height, width, RGB)
     #          stimuli_frame        -- 1darray, array of frames when stimilus is on
     #          rectangle            -- tuple, (top, left, width) of zoom rectangle
     #          rectangle_specs      -- tuple, ((R,G,B), lineThickness) of the rectangle specifying zoom in area
     #          circle_specs         -- tuple, ((center_x, center_y), radius, (R,G,B)) of the circle indicating on-stimulus
-    #  Return: canvas               -- 3darray, video of raw input and concatenated zoomed rectangle on the right side
+    #  Return: canvas               -- 4darray, video of raw input and concatenated zoomed rectangle on the right side
+    #                                  (frame_num, height, width, RGB)
     if isinstance(source, str):
         stack, _ = read_tif(source)
     elif isinstance(source, np.ndarray):
